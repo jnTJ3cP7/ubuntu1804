@@ -1,0 +1,8 @@
+guestuser: vagrant
+mount:
+  - ${HOME}/git
+  - ${HOME}/.aws
+vbguest: true
+vb:
+  memory: 4096
+  cpus: 1
