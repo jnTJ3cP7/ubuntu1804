@@ -1,5 +1,11 @@
 settings = YAML.load_file 'settings.yml'
 
+for plugin in settings.fetch('plugins', [])
+	unless Vagrant.has_plugin?(plugin)
+		raise "#{plugin} is not installed!\nPlease execute the command [ vagrant plugin install #{plugin} ]"
+	end
+end
+
 username = settings['guestuser'].strip
 homedir = "/home/#{username}"
 
@@ -22,7 +28,7 @@ Vagrant.configure("2") do |config|
 	for dir in settings['mount']
 		host_path = `echo #{dir}`.strip
 		basename = File.basename(host_path)
-	  config.vm.synced_folder host_path, "#{homedir}/#{basename}", mount_options: ['dmode=777', 'fmode=777'],  type: "virtualbox", owner: username, group: username
+		config.vm.synced_folder host_path, "#{homedir}/#{basename}", mount_options: ['dmode=777', 'fmode=777'],  type: "virtualbox", owner: username, group: username
 	end
 
 	# config.hostsupdater.aliases = settings['hostsupdater']
@@ -32,9 +38,27 @@ Vagrant.configure("2") do |config|
 		vb.cpus = settings['vb']['cpus']
 		vb.customize ["modifyvm", :id, "--uartmode1", "disconnected"]
 		vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
+
+		# vb.gui = true
+    # vb.customize [
+    #   "modifyvm", :id,
+    #   "--vram", "256",
+    #   "--accelerate3d", "on",
+    #   "--hwvirtex", "on",
+    #   "--nestedpaging", "on",
+    #   "--largepages", "on",
+    #   "--ioapic", "on",
+    #   "--pae", "on",
+		# 	"--paravirtprovider", "kvm",
+		# 	"--clipboard", "bidirectional",
+		# 	"--draganddrop", "bidirectional",
+    # ]
 	end
 
 	config.vm.provision "first_config", type: "shell", path: "first_config.sh", args: username, privileged: false
+	config.vm.provision :reload
+	# config.vm.provision "vscode", type: "shell", path: "vscode.sh", args: username, privileged: false
+	config.vm.provision "java", type: "shell", path: "java.sh", args: username, privileged: false
 	# config.vm.provision "runTest", type: "shell", run: "never", inline: "echo helloooooooooooo"
 
 end

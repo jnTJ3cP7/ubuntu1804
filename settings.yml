@@ -1,3 +1,6 @@
+plugins:
+  - vagrant-vbguest
+  - vagrant-reload
 guestuser: vagrant
 mount:
   - ${HOME}/git
@@ -5,4 +8,4 @@ mount:
 vbguest: true
 vb:
   memory: 4096
-  cpus: 1
+  cpus: 2

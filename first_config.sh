@@ -75,6 +75,11 @@ source ~/.zshrc 2>/dev/null
 NODE_VERSION="v10.14.2"
 ndenv install $NODE_VERSION
 ndenv global $NODE_VERSION
+cat << EOS >> ~/.zshrc
+# for yarn global installed packages
+export PATH="$(yarn global bin):\$PATH"
+
+EOS
 
 ##############
 ### Docker ###
@@ -149,8 +154,23 @@ codebuildexec () {
 
 EOS
 
+#############
+### react ###
+#############
+source ~/.zshrc
+yarn global add create-react-app
+cat << EOS >> ~/.zshrc
+# for react-script to detect source code changes
+export CHOKIDAR_USEPOLLING=true
+
+EOS
+
 
 # npm install -g json-server
 # apt install -y redis-tools
+
+# sudo apt-get install ubuntu-desktop
+# TODO: default shell change `sudo apt install -y gnome-session-flashback`
+
 
 sudo apt autoremove
