@@ -39,25 +39,25 @@ Vagrant.configure("2") do |config|
 		vb.customize ["modifyvm", :id, "--uartmode1", "disconnected"]
 		vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
 
-		# vb.gui = true
-    # vb.customize [
-    #   "modifyvm", :id,
-    #   "--vram", "256",
-    #   "--accelerate3d", "on",
-    #   "--hwvirtex", "on",
-    #   "--nestedpaging", "on",
-    #   "--largepages", "on",
-    #   "--ioapic", "on",
-    #   "--pae", "on",
-		# 	"--paravirtprovider", "kvm",
-		# 	"--clipboard", "bidirectional",
-		# 	"--draganddrop", "bidirectional",
-    # ]
+		vb.gui = true
+    vb.customize [
+      "modifyvm", :id,
+      "--vram", "128",
+      "--accelerate3d", "on",
+      "--hwvirtex", "on",
+      "--nestedpaging", "on",
+      "--largepages", "on",
+      "--ioapic", "on",
+      "--pae", "on",
+			"--paravirtprovider", "kvm",
+			"--clipboard", "bidirectional",
+			"--draganddrop", "bidirectional",
+    ]
 	end
 
 	config.vm.provision "first_config", type: "shell", path: "first_config.sh", args: username, privileged: false
 	config.vm.provision :reload
-	# config.vm.provision "vscode", type: "shell", path: "vscode.sh", args: username, privileged: false
+	config.vm.provision "vscode", type: "shell", path: "vscode.sh", args: username, privileged: false
 	config.vm.provision "java", type: "shell", path: "java.sh", args: username, privileged: false
 	# config.vm.provision "runTest", type: "shell", run: "never", inline: "echo helloooooooooooo"
 

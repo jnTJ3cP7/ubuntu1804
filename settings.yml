@@ -8,4 +8,4 @@ mount:
 vbguest: true
 vb:
   memory: 4096
-  cpus: 2
+  cpus: 1

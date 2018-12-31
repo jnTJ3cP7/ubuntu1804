@@ -169,8 +169,8 @@ EOS
 # npm install -g json-server
 # apt install -y redis-tools
 
-# sudo apt-get install ubuntu-desktop
-# TODO: default shell change `sudo apt install -y gnome-session-flashback`
+sudo apt install -y lubuntu-desktop
+# sudo apt install -y gnome-session-flashback
 
 
 sudo apt autoremove
