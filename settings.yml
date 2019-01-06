@@ -1,11 +1,10 @@
 plugins:
-  - vagrant-vbguest
   - vagrant-reload
 guestuser: vagrant
 mount:
   - ${HOME}/git
   - ${HOME}/.aws
-vbguest: true
 vb:
   memory: 4096
   cpus: 1
+  gui: true

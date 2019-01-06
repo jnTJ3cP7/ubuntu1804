@@ -10,8 +10,9 @@ username = settings['guestuser'].strip
 homedir = "/home/#{username}"
 
 Vagrant.configure("2") do |config|
-	config.vbguest.auto_update = settings['vbguest']
-	config.vbguest.no_remote = false
+	if Vagrant.has_plugin?('vagrant-vbguest')
+		config.vbguest.auto_update = false
+	end
 
 	config.vm.box = "ubuntu/bionic64"
 	config.vm.box_check_update = false
@@ -39,7 +40,7 @@ Vagrant.configure("2") do |config|
 		vb.customize ["modifyvm", :id, "--uartmode1", "disconnected"]
 		vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
 
-		vb.gui = true
+		vb.gui = settings['vb']['gui']
     vb.customize [
       "modifyvm", :id,
       "--vram", "128",
@@ -52,7 +53,7 @@ Vagrant.configure("2") do |config|
 			"--paravirtprovider", "kvm",
 			"--clipboard", "bidirectional",
 			"--draganddrop", "bidirectional",
-    ]
+		]
 	end
 
 	config.vm.provision "first_config", type: "shell", path: "first_config.sh", args: username, privileged: false

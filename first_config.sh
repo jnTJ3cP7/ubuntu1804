@@ -20,8 +20,23 @@ esac
 sudo apt update -y
 sudo apt full-upgrade -y
 
+###################
+### Gui install ###
+###################
+sudo apt install -y lubuntu-desktop
+
+#############################
+### Guest Addition update ###
+#############################
+# need for screen resolution because vbguest plugin don't work for this.
+sudo apt install -y virtualbox-guest-dkms virtualbox-guest-utils virtualbox-guest-x11
+
+############################
+### Baseic info settings ###
+###########################
 sudo update-locale LC_ALL=C.UTF-8
 sudo timedatectl set-timezone Asia/Tokyo
+
 
 ###########
 ### Zsh ###
@@ -168,9 +183,5 @@ EOS
 
 # npm install -g json-server
 # apt install -y redis-tools
-
-sudo apt install -y lubuntu-desktop
-# sudo apt install -y gnome-session-flashback
-
 
 sudo apt autoremove
