@@ -1,2 +1,5 @@
-# vagrant
+# for this repository only
+/settings.yaml
+
+# for vagrant
 /.vagrant

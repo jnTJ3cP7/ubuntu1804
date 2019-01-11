@@ -1,4 +1,4 @@
-settings = YAML.load_file 'settings.yml'
+settings = YAML.load_file 'settings.yaml'
 
 for plugin in settings.fetch('plugins', [])
 	unless Vagrant.has_plugin?(plugin)

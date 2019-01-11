@@ -1,0 +1,13 @@
+###############################################################
+### Please rewrite below values to adjust your environment. ###
+###############################################################
+plugins:
+  - vagrant-reload
+guestuser: vagrant
+mount:
+  - ${HOME}/git
+  - ${HOME}/.aws
+vb:
+  memory: 4096
+  cpus: 1
+  gui: true
