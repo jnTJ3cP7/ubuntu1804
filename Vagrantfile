@@ -24,12 +24,12 @@ Vagrant.configure("2") do |config|
 	# 	config.vm.network "forwarded_port", guest: port, host: port
 	# end
 
-	config.vm.synced_folder "./", "/vagrant", mount_options: ['dmode=777', 'fmode=777'], disabled: true
+	config.vm.synced_folder "./", "/vagrant", disabled: true
 
 	for dir in settings['mount']
 		host_path = `echo #{dir}`.strip
 		basename = File.basename(host_path)
-		config.vm.synced_folder host_path, "#{homedir}/#{basename}", mount_options: ['dmode=777', 'fmode=777'],  type: "virtualbox", owner: username, group: username
+		config.vm.synced_folder host_path, "#{homedir}/#{basename}", mount_options: ['dmode=755', 'fmode=744'],  type: "virtualbox", owner: username, group: username
 	end
 
 	# config.hostsupdater.aliases = settings['hostsupdater']
@@ -43,7 +43,7 @@ Vagrant.configure("2") do |config|
 		vb.gui = settings['vb']['gui']
     vb.customize [
       "modifyvm", :id,
-      "--vram", "128",
+      "--vram", "256",
       "--accelerate3d", "on",
       "--hwvirtex", "on",
       "--nestedpaging", "on",
@@ -56,10 +56,16 @@ Vagrant.configure("2") do |config|
 		]
 	end
 
-	config.vm.provision "first_config", type: "shell", path: "first_config.sh", args: username, privileged: false
+	provision_script_base_path = "provision_scripts"
+	config.vm.provision "first_config", type: "shell", path: "first_config.sh", privileged: false
 	config.vm.provision :reload
-	config.vm.provision "vscode", type: "shell", path: "vscode.sh", args: username, privileged: false
-	config.vm.provision "java", type: "shell", path: "java.sh", args: username, privileged: false
+	config.vm.provision "anyenv", type: "shell", path: "#{provision_script_base_path}/anyenv.sh", privileged: false
+	config.vm.provision "python", type: "shell", path: "#{provision_script_base_path}/python.sh", privileged: false
+	config.vm.provision "node", type: "shell", path: "#{provision_script_base_path}/node.sh", privileged: false
+	config.vm.provision "go", type: "shell", path: "#{provision_script_base_path}/go.sh", privileged: false
+	config.vm.provision "vscode", type: "shell", path: "#{provision_script_base_path}/vscode.sh", args: settings['vscode']['code-settings-sync'], privileged: false
+	# config.vm.provision "java", type: "shell", path: "java.sh", args: username, privileged: false
 	# config.vm.provision "runTest", type: "shell", run: "never", inline: "echo helloooooooooooo"
+	config.vm.provision "first_config_remained", type: "shell", path: "first_config_remained.sh", args: username, privileged: false
 
 end

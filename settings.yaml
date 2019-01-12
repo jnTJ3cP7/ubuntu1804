@@ -9,5 +9,7 @@ mount:
   - ${HOME}/.aws
 vb:
   memory: 4096
-  cpus: 1
+  cpus: 2
   gui: true
+vscode:
+  code-settings-sync: ''
