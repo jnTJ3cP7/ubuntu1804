@@ -12,4 +12,5 @@ vb:
   cpus: 2
   gui: true
 vscode:
-  code-settings-sync: ''
+  personal_access_token: ''
+  gist_id: ''

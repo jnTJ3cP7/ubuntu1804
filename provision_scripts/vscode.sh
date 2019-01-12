@@ -2,13 +2,19 @@
 
 # params check
 # arg 1 is Personal Access Token for code-settings-sync
+# arg 2 is Gist ID for code-settings-sync
 case $# in
 	0)
-		echo 'Personal Access Token is not specified'
+		echo 'Personal Access Token and Gist ID are not specified'
 		exit 1
 		;;
 	1)
+		echo 'Personal Access Token or Gist ID is not specified'
+		exit 1
+		;;
+	2)
 		PERSONAL_ACCESS_TOKEN=$1
+		GIST_ID=$2
 		;;
 	*)
 		echo 'Unexpected params exist'
@@ -23,13 +29,18 @@ sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode s
 sudo apt install -y apt-transport-https
 sudo apt update -y
 sudo apt install -y code
+sudo apt autoremove
 
-code --force --install-extension vscodevim.vim
-code --force --install-extension robertohuertasm.vscode-icons
-code --force --install-extension mde.select-highlight-minimap
-code --force --install-extension eamodio.gitlens
-code --force --install-extension ms-vscode.go
 code --force --install-extension shan.code-settings-sync
 if ! grep -q "\"token\":\"$PERSONAL_ACCESS_TOKEN\"" ~/.config/Code/User/syncLocalSettings.json; then
   echo "{\"token\":\"$PERSONAL_ACCESS_TOKEN\"}" > ~/.config/Code/User/syncLocalSettings.json
+fi
+if egrep -q '"sync\.gist": ".+"' ~/.config/Code/User/settings.json; then
+	sed -i "s/\"sync\.gist\": \".\+\"/\"sync\.gist\": \"$GIST_ID\"/g" ~/.config/Code/User/settings.json
+else
+	cat << EOS > ~/.config/Code/User/settings.json
+{
+    "sync.gist": "$GIST_ID"
+}
+EOS
 fi
