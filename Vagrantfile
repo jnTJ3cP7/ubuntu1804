@@ -64,6 +64,8 @@ Vagrant.configure("2") do |config|
 	config.vm.provision "node", type: "shell", path: "#{provision_script_base_path}/node.sh", privileged: false
 	config.vm.provision "go", type: "shell", path: "#{provision_script_base_path}/go.sh", privileged: false
 	config.vm.provision "vscode", type: "shell", path: "#{provision_script_base_path}/vscode.sh", args: [settings['vscode']['personal_access_token'], settings['vscode']['gist_id']], privileged: false
+	config.vm.provision "docker", type: "shell", path: "#{provision_script_base_path}/docker.sh", privileged: false
+	config.vm.provision "k8s", type: "shell", path: "#{provision_script_base_path}/k8s.sh", privileged: false
 	# config.vm.provision "java", type: "shell", path: "java.sh", args: username, privileged: false
 	# config.vm.provision "runTest", type: "shell", run: "never", inline: "echo helloooooooooooo"
 	config.vm.provision "first_config_remained", type: "shell", path: "first_config_remained.sh", args: username, privileged: false
