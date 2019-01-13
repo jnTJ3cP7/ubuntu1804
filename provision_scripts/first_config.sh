@@ -21,13 +21,13 @@ sudo apt install -y virtualbox-guest-dkms virtualbox-guest-utils virtualbox-gues
 sudo update-locale LC_ALL=C.UTF-8
 sudo timedatectl set-timezone Asia/Tokyo
 
+# for Japanese input from keyboar
 sudo apt install -y fcitx-mozc
 
 ###########
 ### Zsh ###
 ###########
-sudo apt install -y \
-	zsh
+sudo apt install -y zsh
 # curl is installed above
 curl -OL https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh
 # login user password need to be username

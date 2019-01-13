@@ -8,6 +8,7 @@ end
 
 username = settings['guestuser'].strip
 homedir = "/home/#{username}"
+private_ip = settings['private_ip'].strip
 
 Vagrant.configure("2") do |config|
 	if Vagrant.has_plugin?('vagrant-vbguest')
@@ -19,7 +20,7 @@ Vagrant.configure("2") do |config|
 
 	config.ssh.username = username
 
-	config.vm.network "private_network", ip: "192.168.33.11"
+	config.vm.network "private_network", ip: private_ip
 	# for port in settings['ports']
 	# 	config.vm.network "forwarded_port", guest: port, host: port
 	# end
@@ -57,7 +58,7 @@ Vagrant.configure("2") do |config|
 	end
 
 	provision_script_base_path = "provision_scripts"
-	config.vm.provision "first_config", type: "shell", path: "first_config.sh", privileged: false
+	config.vm.provision "first_config", type: "shell", path: "#{provision_script_base_path}/first_config.sh", privileged: false
 	config.vm.provision :reload
 	config.vm.provision "anyenv", type: "shell", path: "#{provision_script_base_path}/anyenv.sh", privileged: false
 	config.vm.provision "python", type: "shell", path: "#{provision_script_base_path}/python.sh", privileged: false
@@ -65,9 +66,10 @@ Vagrant.configure("2") do |config|
 	config.vm.provision "go", type: "shell", path: "#{provision_script_base_path}/go.sh", privileged: false
 	config.vm.provision "vscode", type: "shell", path: "#{provision_script_base_path}/vscode.sh", args: [settings['vscode']['personal_access_token'], settings['vscode']['gist_id']], privileged: false
 	config.vm.provision "docker", type: "shell", path: "#{provision_script_base_path}/docker.sh", privileged: false
-	config.vm.provision "k8s", type: "shell", path: "#{provision_script_base_path}/k8s.sh", privileged: false
+	config.vm.provision "k8s", type: "shell", path: "#{provision_script_base_path}/k8s.sh", args: private_ip, privileged: false
 	# config.vm.provision "java", type: "shell", path: "java.sh", args: username, privileged: false
 	# config.vm.provision "runTest", type: "shell", run: "never", inline: "echo helloooooooooooo"
-	config.vm.provision "first_config_remained", type: "shell", path: "first_config_remained.sh", args: username, privileged: false
+	# config.vm.provision "first_config_remained", type: "shell", path: "first_config_remained.sh", args: username, privileged: false
+	config.vm.provision :reload
 
 end

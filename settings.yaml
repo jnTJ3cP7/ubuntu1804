@@ -4,6 +4,7 @@
 plugins:
   - vagrant-reload
 guestuser: vagrant
+private_ip: ''
 mount:
   - ${HOME}/git
   - ${HOME}/.aws

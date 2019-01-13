@@ -9,6 +9,22 @@ if ! which docker >/dev/null; then
 	exit 1
 fi
 
+# params check
+# arg 1 is Private IP of VM
+case $# in
+	0)
+		echo 'Private IP is not specified'
+		exit 1
+		;;
+	1)
+    PRIVATE_IP=$1
+		;;
+	*)
+		echo 'Unexpected params exist'
+		exit 1
+		;;
+esac
+
 if ! [ -f /etc/systemd/system/minikube-proxy.service ]; then
   curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x minikube && sudo cp minikube /usr/local/bin/ && rm minikube
   curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x kubectl && sudo cp kubectl /usr/local/bin/ && rm kubectl
@@ -27,8 +43,10 @@ export MINIKUBE_WANTREPORTERRORPROMPT=false
 export MINIKUBE_HOME=$HOME
 export CHANGE_MINIKUBE_NONE_USER=true
 export KUBECONFIG=$HOME/.kube/config
+echo "If minikube becomes to be default settigns, dashboard URL is below (maybe take a while until start up)\nhttp://${PRIVATE_IP}:8001/api/v1/namespaces/kube-system/services/http:kubernetes-dashboard:/proxy/#!/persistentvolume?namespace=default"
+
 EOS
-source ~/.zshrc 2>/dev/null
+  source ~/.zshrc 2>/dev/null
 
   sudo -E minikube start --vm-driver=none
 
@@ -55,6 +73,6 @@ Restart=always
 WantedBy=multi-user.target
 EOF"
 
-sudo systemctl start minikube-proxy.service
-sudo systemctl enable minikube-proxy.service
+  sudo systemctl start minikube-proxy.service
+  sudo systemctl enable minikube-proxy.service
 fi
