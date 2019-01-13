@@ -13,15 +13,20 @@ fi
 if which pyenv >/dev/null; then
 	anyenv update -f pyenv
 else
-	sudo apt update -y
-	sudo apt install -y \
-		zlib1g-dev \
-		libssl-dev \
-		libffi-dev \
-		libbz2-dev \
-		libreadline-dev \
-		libsqlite3-dev
-	sudo apt autoremove
+	sudo apt update -y && \
+		sudo apt install -y \
+			zlib1g-dev \
+			libssl-dev \
+			libffi-dev \
+			libbz2-dev \
+			libreadline-dev \
+			libsqlite3-dev && \
+		sudo apt autoremove -y
+	if [ $? -ne 0 ]; then
+		echo 'exit because must liblaries install failed'
+		exit 1
+	fi
+
 	anyenv install pyenv
 	source ~/.zshrc 2>/dev/null
 fi
