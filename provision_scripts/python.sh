@@ -5,10 +5,7 @@
 #   - anyenv
 ###################################################
 source ~/.zshrc 2>/dev/null
-if ! which anyenv >/dev/null; then
-	echo 'please provision anyenv before python provision'
-	exit 1
-fi
+! which anyenv >/dev/null && echo 'please provision anyenv before python provision' && exit 1
 
 if which pyenv >/dev/null; then
 	anyenv update -f pyenv
@@ -20,14 +17,14 @@ else
 			libffi-dev \
 			libbz2-dev \
 			libreadline-dev \
-			libsqlite3-dev && \
-		sudo apt autoremove -y
+			libsqlite3-dev
 	if [ $? -ne 0 ]; then
 		echo 'exit because must liblaries install failed'
 		exit 1
 	fi
+	sudo apt autoremove -y
 
-	anyenv install pyenv
+	anyenv install pyenv || {echo 'pyenv install failed' && exit 1}
 	source ~/.zshrc 2>/dev/null
 fi
 
@@ -36,8 +33,9 @@ PYTHON_VERSION=$(curl -s https://www.python.org/downloads/ | sed -n 's/^.*<a cla
 PYENV_VERSIONS=$(pyenv versions)
 if [[ $(echo $PYENV_VERSIONS | sed -n 's/^\* \([^ ]\+\) .*$/\1/p') != $PYTHON_VERSION ]]; then
 	if ! echo $PYENV_VERSIONS | egrep -q "^  $PYTHON_VERSION$"; then
-		pyenv install $PYTHON_VERSION
+		pyenv install $PYTHON_VERSION || {echo "pyenv install [ $PYTHON_VERSION ] failed" && exit 1}
 	fi
-	pyenv global $PYTHON_VERSION
+	pyenv global $PYTHON_VERSION || {echo "pyenv global [ $PYTHON_VERSION ] failed" && exit 1}
 fi
-pip install --upgrade pip pipenv
+
+pip install --upgrade pip pipenv || {echo 'pip install --upgrade pip pipenv' && exit 1}

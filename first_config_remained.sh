@@ -1,24 +1,6 @@
 #!/bin/bash
 
-sudo apt update -y
-sudo apt full-upgrade -y
-
 source ~/.zshrc
-
-###############
-### AWS CLI ###
-###############
-pip install awscli --upgrade
-cat << EOS >> ~/.zshrc
-# for aws completion
-source $(pyenv root)/versions/${PYTHON_VERSION}/bin/aws_zsh_completer.sh
-
-EOS
-
-###################
-### AWS SAM CLI ###
-###################
-pip install aws-sam-cli --upgrade
 
 ##########################
 ### CodeBuild on local ###
@@ -60,19 +42,7 @@ codebuildexec () {
 
 EOS
 
-#############
-### react ###
-#############
-source ~/.zshrc
-yarn global add create-react-app
-cat << EOS >> ~/.zshrc
-# for react-script to detect source code changes
-export CHOKIDAR_USEPOLLING=true
-
-EOS
-
-
 # npm install -g json-server
 # apt install -y redis-tools
 
-sudo apt autoremove
+sudo apt autoremove -y
