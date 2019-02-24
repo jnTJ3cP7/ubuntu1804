@@ -53,7 +53,11 @@ fi
 THEME='powerlevel9k'
 sed -i "s/^zstyle \(.*\) theme .*$/zstyle \1 theme '$THEME'/g" $PREZTO_CONFIG
 line_num=$(echo $NOW_THEME_INFO | awk -F: '{print $1}')
-sed -i "$line_num i\export TERM='xterm-256color'\nPOWERLEVEL9K_MODE='nerdfont-complete'\nPOWERLEVEL9K_VCS_GIT_HOOKS=(vcs-detect-changes)" $PREZTO_CONFIG
+sed -i "$line_num i\POWERLEVEL9K_VCS_GIT_HOOKS=(vcs-detect-changes)" $PREZTO_CONFIG
+sed -i "$line_num i\POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir virtualenv vcs)" $PREZTO_CONFIG
+sed -i "$line_num i\POWERLEVEL9K_MODE='nerdfont-complete'" $PREZTO_CONFIG
+# TODO TERM should be located other zsh script and duplicated if re this script executed
+sed -i "$line_num i\export TERM='xterm-256color'" $PREZTO_CONFIG
 
 # TODO Delete this settings after v3 stable version released
 sed -i "s/updateChannel: '.*'/updateChannel: 'canary'/g" $HYPER_CONFIG
@@ -63,8 +67,4 @@ if ! egrep -q "fontFamily: '.*$FONT.*'" $HYPER_CONFIG; then
 	sed -i "s/fontFamily: '\(.*\)'/fontFamily: '\"$FONT\", \1'/g" $HYPER_CONFIG
 fi
 # plugins
-sed -i "s/plugins: \[.*\]/plugins: ['hyper-material-theme', 'hyper-overlay', 'hyperterm-paste']/g" $HYPER_CONFIG
-# for hyper-overlay plugin settings
-if ! grep -q 'overlay: {' $HYPER_CONFIG; then
-	sed -i "/config: {/a\    overlay: {\n      hotkeys: {\n        open: ['Control+Space+o'],\n        close: ['Control+Space+w'],\n      },\n    }," $HYPER_CONFIG
-fi
+sed -i "s/plugins: \[.*\]/plugins: ['hyper-material-theme', 'hyperterm-paste']/g" $HYPER_CONFIG
