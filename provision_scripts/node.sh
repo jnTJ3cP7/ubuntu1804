@@ -14,9 +14,11 @@ else
 	source ~/.zshrc 2>/dev/null
 fi
 
-if ! [ -d "$(ndenv root)/plugins/ndenv-yarn-install/.git" ]; then
-	git clone --depth 1 https://github.com/pine/ndenv-yarn-install.git "$(ndenv root)/plugins/ndenv-yarn-install" || \
-		(echo 'yarn plugin repository clone failed' && exit 1)
+YARN_PLUGIN_DIR=$(ndenv root)/plugins/ndenv-yarn-install
+if ! [ -d ${YARN_PLUGIN_DIR}/.git ]; then
+	rm -rf $YARN_PLUGIN_DIR
+	git clone --depth 1 https://github.com/pine/ndenv-yarn-install.git $YARN_PLUGIN_DIR || \
+		{echo 'yarn plugin repository clone failed' && exit 1}
 	source ~/.zshrc 2>/dev/null
 fi
 

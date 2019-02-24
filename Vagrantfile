@@ -18,11 +18,13 @@ Vagrant.configure("2") do |config|
 	config.vm.box = "ubuntu/bionic64"
 	config.vm.box_check_update = false
 
+	config.disksize.size = '30GB'
+
 	config.ssh.username = username
 
 	config.vm.network "private_network", ip: private_ip
 	# for port in settings['ports']
-	# 	config.vm.network "forwarded_port", guest: port, host: port
+	# 	config.vm.network "forwarded_port", guest: port['guest'], host: port['host']
 	# end
 
 	config.vm.synced_folder "./", "/vagrant", disabled: true
@@ -40,6 +42,7 @@ Vagrant.configure("2") do |config|
 		vb.cpus = settings['vb']['cpus']
 		vb.customize ["modifyvm", :id, "--uartmode1", "disconnected"]
 		vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
+		vb.customize ["modifyvm", :id, "--cpuexecutioncap", "90"]
 
 		vb.gui = settings['vb']['gui']
     vb.customize [
@@ -57,11 +60,16 @@ Vagrant.configure("2") do |config|
 		]
 	end
 
+	# Must
 	provision_script_base_path = "provision_scripts"
 	config.vm.provision "first_config", type: "shell", path: "#{provision_script_base_path}/first_config.sh", privileged: false
 	config.vm.provision :reload
+	config.vm.provision "git", type: "shell", path: "#{provision_script_base_path}/git.sh", privileged: false
+	config.vm.provision "terminal", type: "shell", path: "#{provision_script_base_path}/terminal.sh", privileged: false
 	config.vm.provision "anyenv", type: "shell", path: "#{provision_script_base_path}/anyenv.sh", privileged: false
 	config.vm.provision "python", type: "shell", path: "#{provision_script_base_path}/python.sh", privileged: false
+
+	# Option
 	config.vm.provision "node", type: "shell", path: "#{provision_script_base_path}/node.sh", privileged: false
 	config.vm.provision "go", type: "shell", path: "#{provision_script_base_path}/go.sh", privileged: false
 	config.vm.provision "java", type: "shell", path: "#{provision_script_base_path}/java.sh", privileged: false

@@ -15,32 +15,39 @@ sudo apt install -y lubuntu-desktop
 # Need for screen resolution because vbguest plugin don't work for this.
 sudo apt install -y virtualbox-guest-dkms virtualbox-guest-utils virtualbox-guest-x11
 
-############################
-### Baseic info settings ###
-############################
+######################
+### Basic settings ###
+######################
 sudo update-locale LC_ALL=C.UTF-8
 sudo timedatectl set-timezone Asia/Tokyo
 
-# for Japanese input from keyboar
+# for Japanese input from keyboard
 sudo apt install -y fcitx-mozc
 
 ###########
 ### Zsh ###
 ###########
+# curl is installed above so not need to install
 sudo apt install -y zsh
-# curl is installed above
-curl -OL https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh
-# login user password need to be username
-#TODO login user password settings
-echo -e $(whoami) | sh install.sh
-rm -f install.sh
-git clone --depth 1 https://github.com/zsh-users/zsh-completions ~/.oh-my-zsh/custom/plugins/zsh-completions
-cat << EOS >> ~/.zshrc
 
-# for zsh-completions
-plugins=(… zsh-completions)
-autoload -U compinit && compinit
+ZPREZTO=${ZDOTDIR:-$HOME}/.zprezto
+git clone --depth 1 --recursive https://github.com/sorin-ionescu/prezto.git $ZPREZTO
+for zfile_path in $ZPREZTO/runcoms/*; do
+	ZFILE_NAME="${zfile_path##*/}"
+	if [ "$ZFILE_NAME" = 'README.md' ]; then
+		continue
+	fi
+	ln -sfn "$zfile_path" "${ZDOTDIR:-$HOME}/.${ZFILE_NAME}"
+done
+sed '$ a' ~/.zshrc
 
-EOS
+ZSH_PATH=$(which zsh)
+awk -F: -v "username=$(whoami)"  '$1 == username{print NR}' /etc/passwd | xargs -i sudo sed -i "{} s ^\(.*\):.*$ \1:$ZSH_PATH g" /etc/passwd
+
+###################
+### Other utils ###
+###################
+sudo apt install -y \
+	jq
 
 sudo apt autoremove -y

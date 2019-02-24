@@ -22,11 +22,14 @@ case $# in
 		;;
 esac
 
-curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
-sudo install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/
-rm microsoft.gpg
-sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
-sudo apt install -y apt-transport-https
+REPO='https://packages.microsoft.com/repos/vscode'
+if ! sudo sh -c "fgrep -q $REPO /etc/apt/sources.list.d/vscode.list"; then
+	curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+	sudo install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/
+	rm microsoft.gpg
+	sudo sh -c "echo \"deb [arch=amd64] $REPO stable main\" > /etc/apt/sources.list.d/vscode.list"
+	sudo apt install -y apt-transport-https
+fi
 sudo apt update -y
 sudo apt install -y code
 sudo apt autoremove

@@ -38,4 +38,12 @@ if [[ $(echo $PYENV_VERSIONS | sed -n 's/^\* \([^ ]\+\) .*$/\1/p') != $PYTHON_VE
 	pyenv global $PYTHON_VERSION || {echo "pyenv global [ $PYTHON_VERSION ] failed" && exit 1}
 fi
 
-pip install --upgrade pip pipenv || {echo 'pip install --upgrade pip pipenv' && exit 1}
+pip install --upgrade pip pipenv || {echo '`pip install --upgrade pip pipenv` failed' && exit 1}
+
+if ! fgrep -q 'PIPENV_VENV_IN_PROJECT' ~/.zshrc; then
+	cat << EOS >> ~/.zshrc
+# for creating venv dir of pipenv
+export PIPENV_VENV_IN_PROJECT=true
+
+EOS
+fi
