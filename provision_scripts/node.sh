@@ -7,6 +7,7 @@
 source ~/.zshrc 2>/dev/null
 ! which anyenv >/dev/null && echo 'please provision anyenv before node provision' && exit 1
 
+# TODO Must change ndenv into nodenv
 if which ndenv >/dev/null; then
 	anyenv update -f ndenv
 else
