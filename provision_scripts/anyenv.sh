@@ -22,7 +22,7 @@ fi
 
 source ~/.zshrc 2>/dev/null
 
-if [ -d ~/.config/anyenv/anyenv-install/.git ]; then
+if [ ! -d ~/.config/anyenv/anyenv-install/.git ]; then
 	anyenv install --force-init
 fi
 anyenv install --update

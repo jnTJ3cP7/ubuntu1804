@@ -30,9 +30,9 @@ sudo apt install -y fcitx-mozc
 # curl is installed above so not need to install
 sudo apt install -y zsh
 
-ZPREZTO=${ZDOTDIR:-$HOME}/.zprezto
-git clone --depth 1 --recursive https://github.com/sorin-ionescu/prezto.git $ZPREZTO
-for zfile_path in $ZPREZTO/runcoms/*; do
+PREZTO_DIR=${ZDOTDIR:-$HOME}/.zprezto
+git clone --depth 1 --recursive https://github.com/sorin-ionescu/prezto.git $PREZTO_DIR
+for zfile_path in $PREZTO_DIR/runcoms/*; do
 	ZFILE_NAME="${zfile_path##*/}"
 	if [ "$ZFILE_NAME" = 'README.md' ]; then
 		continue
