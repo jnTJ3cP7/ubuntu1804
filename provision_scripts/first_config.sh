@@ -47,7 +47,10 @@ awk -F: -v "username=$(whoami)"  '$1 == username{print NR}' /etc/passwd | xargs 
 ###################
 ### Other utils ###
 ###################
+# jq is used by general task for development
+# default-libmysqlclient-dev is needed by mysql library use development e.g mysqlclient
 sudo apt install -y \
-	jq
+	jq \
+	default-libmysqlclient-dev
 
 sudo apt autoremove -y
