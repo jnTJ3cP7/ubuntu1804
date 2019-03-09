@@ -32,7 +32,7 @@ if ! sudo sh -c "fgrep -q $REPO /etc/apt/sources.list.d/vscode.list"; then
 fi
 sudo apt update -y
 sudo apt install -y code
-sudo apt autoremove
+sudo apt autoremove -y
 
 code --force --install-extension shan.code-settings-sync
 if ! grep -q "\"token\":\"$PERSONAL_ACCESS_TOKEN\"" ~/.config/Code/User/syncLocalSettings.json; then
