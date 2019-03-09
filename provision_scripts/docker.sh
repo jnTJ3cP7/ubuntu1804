@@ -1,11 +1,7 @@
 #!/bin/zsh
 
-###################################################
-# This provision script depends on below provisions
-#   - python
-###################################################
 source ~/.zshrc 2>/dev/null
-! which pyenv >/dev/null && echo 'please provision pyenv before docker provision' && exit 1
+! which pyenv >/dev/null && echo 'please provision python before docker provision' && exit 1
 
 sudo apt install -y \
 	apt-transport-https \
@@ -17,7 +13,7 @@ sudo add-apt-repository \
 	$(lsb_release -cs) \
 	stable"
 sudo apt update -y
-# old version specified for minikube. docker version suffix no longrer '-ce', but minikube can't do it.
+# old version specified for minikube. docker version suffix no longrer '-ce', but minikube can't do it yet.
 sudo apt install -y docker-ce=18.06.1~ce~3-0~ubuntu || {echo 'docker install failed' && exit 1}
 sudo apt autoremove -y
 

@@ -1,9 +1,5 @@
 #!/bin/zsh
 
-###################################################
-# This provision script depends on below provisions
-#   - python
-###################################################
 source ~/.zshrc 2>/dev/null
 ! which pyenv >/dev/null && echo 'please provision python before awscli provision' && exit 1
 
